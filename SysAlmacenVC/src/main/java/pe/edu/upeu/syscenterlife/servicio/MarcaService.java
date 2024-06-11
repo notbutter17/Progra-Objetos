@@ -1,8 +1,10 @@
 package pe.edu.upeu.syscenterlife.servicio;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upeu.syscenterlife.modelo.ComboBoxOption;
 import pe.edu.upeu.syscenterlife.modelo.Marca;
 import pe.edu.upeu.syscenterlife.repositorio.MarcaRepository;
 
@@ -34,5 +36,13 @@ public class MarcaService {
     // Buscar por ID
     public Marca buscarEntidad(Long id){
         return repository.findById(id).orElse(null);
+    }
+    public List <ComboBoxOption> listaMarcaCombobox(){
+        List <ComboBoxOption> listar=new ArrayList<>();
+        for (Marca marca : repository.findAll()) {
+            listar.add(new ComboBoxOption(String.valueOf(marca.getIdMarca()),
+                    marca.getNombre()));
+        }
+        return listar;
     }
 }

@@ -27,6 +27,9 @@ import pe.edu.upeu.syscenterlife.componentes.FondoPanel;
 import pe.edu.upeu.syscenterlife.componentes.MyPasswordField;
 import pe.edu.upeu.syscenterlife.componentes.MyTextField;
 import pe.edu.upeu.syscenterlife.componentes.PanelBorder;
+import pe.edu.upeu.syscenterlife.modelo.SessionManager;
+import pe.edu.upeu.syscenterlife.modelo.Usuario;
+import pe.edu.upeu.syscenterlife.servicio.UsuarioService;
 import pe.edu.upeu.syscenterlife.util.MsgBox;
 import pe.edu.upeu.syscenterlife.util.UtilsX;
 
@@ -49,6 +52,9 @@ public class Login extends javax.swing.JFrame {
     @Autowired
     GUIMain gUIMain;
 
+    @Autowired
+    UsuarioService usuarioService;
+
     public Login() {
         initComponents();
         this.setTitle("Formulario de Ingreso-SysCenterlife");
@@ -65,7 +71,7 @@ public class Login extends javax.swing.JFrame {
             };
         } catch (Exception e) {
         }
-        
+
         txtPassword = new MyPasswordField();
         loginButton = new Button();
         loginButton.setFont(new Font("sansserif", 1, 20));
@@ -85,52 +91,78 @@ public class Login extends javax.swing.JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (txtUsername.getText().equals("admin")
-                        && String.valueOf(txtPassword.getPassword()).equals("admin")) {
+                Usuario usu = usuarioService.loginUsuario(txtUsername.getText(), new String(txtPassword.getPassword()));
+                if (usu != null) {
                     gUIMain.setContexto(ctx);
-                    gUIMain.setVisible(true);
-                    dispose();
-                } else {
+                
+                gUIMain.setVisible(true);
+                SessionManager.getInstance().setUserId(usu.getIdUsuario());
+                SessionManager.getInstance().setUserName(usu.getUser());
+                dispose();
+            }
+
+            
+                else {
                     new MsgBox("Error al ingresar!", NORMAL, "");
-                }
             }
-        });
-        txtUsername.addFocusListener(new FocusListener() {
+        }
+    }
+
+    );
+    txtUsername.addFocusListener ( 
+        new FocusListener() {
             @Override
-            public void focusLost(FocusEvent e) {
+        public void focusLost
+        (FocusEvent e
+        
+            ) {
                 if (txtUsername.getText().equals("")) {
-                    txtUsername.setText("Coloca tu usuario");
-                    txtUsername.setForeground(Color.gray);
-                }
+                txtUsername.setText("Coloca tu usuario");
+                txtUsername.setForeground(Color.gray);
             }
+        }
 
-            @Override
-            public void focusGained(FocusEvent e) {
+        @Override
+        public void focusGained
+        (FocusEvent e
+        
+            ) {
                 if (txtUsername.getText().equals("Coloca tu usuario")) {
-                    txtUsername.setText("");
-                    txtUsername.setForeground(Color.black);
-                }
+                txtUsername.setText("");
+                txtUsername.setForeground(Color.black);
             }
-        });
-        txtPassword.addFocusListener(new FocusListener() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (txtPassword.getText().equals("")) {
-                    txtPassword.setText("Coloca tu clave");
-                    txtPassword.setForeground(Color.gray);
-                    txtPassword.setEchoChar((char) 0);
-                }
-            }
+        }
+    }
 
+    );
+    txtPassword.addFocusListener ( 
+        new FocusListener() {
             @Override
-            public void focusGained(FocusEvent e) {
-                if (txtPassword.getText().equals("Coloca tu clave")) {
-                    txtPassword.setText("");
-                    txtPassword.setEchoChar('*');
-                    txtPassword.setForeground(Color.black);
-                }
+        public void focusLost
+        (FocusEvent e
+        
+            ) {
+                if (txtPassword.getText().equals("")) {
+                txtPassword.setText("Coloca tu clave");
+                txtPassword.setForeground(Color.gray);
+                txtPassword.setEchoChar((char) 0);
             }
-        });
+        }
+
+        @Override
+        public void focusGained
+        (FocusEvent e
+        
+            ) {
+                if (txtPassword.getText().equals("Coloca tu clave")) {
+                txtPassword.setText("");
+                txtPassword.setEchoChar('*');
+                txtPassword.setForeground(Color.black);
+            }
+        }
+    }
+
+);
     }
 
     public void initCustom() {
@@ -203,16 +235,28 @@ public class Login extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Login.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Login.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Login.class  
+
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
